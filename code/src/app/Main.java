@@ -13,7 +13,7 @@ public class Main {
 
 
         // test
-//        DatabaseConnector.getTrainers();
+//        DatabaseConnector.getCourts();
 //        System.exit(0);
         /////////////
 

@@ -2,9 +2,11 @@ package gui;
 
 import app.database.DatabaseConnector;
 import app.tables.ClientTableModel;
+import app.tables.CourtTableModel;
 import app.tables.TrainerTableModel;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.time.LocalDate;
 
@@ -16,6 +18,7 @@ public class GUI implements Runnable {
     private JPanel statusPanel;
     private JTable clientTable;
     private JTable trenerTable;
+    private JTable courtTable;
 
     private JFrame frame;
 
@@ -37,12 +40,14 @@ public class GUI implements Runnable {
     private void prepareTables() {
         clientTable.setModel(new ClientTableModel());
         trenerTable.setModel(new TrainerTableModel());
+        courtTable.setModel(new CourtTableModel());
     }
 
     private void getData() {
         try {
             DatabaseConnector.getClients();
             DatabaseConnector.getTrainers();
+            DatabaseConnector.getCourts();
         } catch (Exception e){
             JOptionPane.showMessageDialog(null,"Failed to connect to database","ERROR",JOptionPane.ERROR_MESSAGE);
             System.exit(1);

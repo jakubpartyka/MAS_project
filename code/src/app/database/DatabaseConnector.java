@@ -1,8 +1,9 @@
 package app.database;
 
 import app.credentials.Hasher;
-import app.data.Client;
-import app.data.Trainer;
+import app.data.Court;
+import app.data.person.Client;
+import app.data.person.Trainer;
 
 import java.sql.*;
 
@@ -85,6 +86,20 @@ public class DatabaseConnector {
             new Trainer(id,imie,nazwisko,numer,data_ur,poziom,opis);
         }
         close(connection);
+    }
+
+    public static void getCourts() throws SQLException {
+        Connection connection = connect();
+        PreparedStatement statement = connection.prepareStatement(Queries.GET_COURTS.expression);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()){
+            int id = resultSet.getInt(1);
+            String nawierzchnia = resultSet.getString(2);
+            int cena = resultSet.getInt(3);
+            boolean oswietlenie = resultSet.getBoolean(4);
+            boolean kryty = resultSet.getBoolean(4);
+            new Court(id,cena,nawierzchnia,oswietlenie,kryty);
+        }
     }
 
     public static boolean authorize(String user, String pass) throws SQLException {

@@ -1,6 +1,6 @@
 package app.tables;
 
-import app.data.Trainer;
+import app.data.person.Trainer;
 
 import javax.swing.table.AbstractTableModel;
 

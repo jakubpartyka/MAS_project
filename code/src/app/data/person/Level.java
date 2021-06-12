@@ -1,4 +1,4 @@
-package app.data;
+package app.data.person;
 
 public enum Level {
     DZIECI,

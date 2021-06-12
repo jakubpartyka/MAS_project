@@ -1,6 +1,6 @@
 package app.tables;
 
-import app.data.Client;
+import app.data.person.Client;
 
 import javax.swing.table.AbstractTableModel;
 
