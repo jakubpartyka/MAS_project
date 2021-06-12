@@ -3,16 +3,14 @@ package gui;
 import app.database.DatabaseConnector;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 
 @SuppressWarnings("deprecation")
 public class Login implements Runnable{
     private JTextField loginField;
     private JPasswordField passwordField;
-    private JLabel loginLabel;
-    private JLabel passLabel;
     private JButton zalogujButton;
     private JPanel mainPanel;
     JFrame frame;
@@ -22,7 +20,7 @@ public class Login implements Runnable{
     private void addListeners() {
         zalogujButton.addActionListener(e -> {
             if(passwordField.getText().isBlank() || loginField.getText().isBlank()){
-                JOptionPane.showConfirmDialog(null,"Please fill all fields!");
+                JOptionPane.showMessageDialog(null,"Please fill all fields!");
                 return;
             }
 
@@ -40,6 +38,15 @@ public class Login implements Runnable{
                 }
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(null,"login failed: " + e1.getMessage(),"Login error",JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        passwordField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                System.out.println(e.getKeyCode());
+                if(e.getKeyCode() == 10)
+                    zalogujButton.doClick();
             }
         });
     }
