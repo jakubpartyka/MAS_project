@@ -1,13 +1,25 @@
 package app;
 
+import app.data.Klient;
+import app.database.DatabaseConnector;
 import gui.GUI;
 import gui.Login;
 
 import javax.swing.*;
+import java.sql.SQLException;
 
 @SuppressWarnings("BusyWait")
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, SQLException {
+
+
+        // test
+        DatabaseConnector.getClients();
+        System.out.println(Klient.all_clients);
+        System.exit(0);
+        /////////////
+
+
         // SHOW LOGIN
         Login login = new Login();
         Thread loginThread = new Thread(login);
