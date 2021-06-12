@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2021-06-12 09:49:12.0
+-- Last modification date: 2021-06-12 11:46:49.606
 
 -- foreign keys
 ALTER TABLE Administracja
