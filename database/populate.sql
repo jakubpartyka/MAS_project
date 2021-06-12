@@ -55,3 +55,9 @@ INSERT INTO Kort (nawierzchnia,cena,oswietlenie,kryty) VALUES
 ("TRAWA",250,1,0),
 ("TRAWA",250,1,0),
 ("TRAWA",250,1,0)
+
+-- populate company
+INSERT INTO Firma (nazwa,NIP,branza) VALUES 
+("PolBud S.A.","123123123123","budowlana"),
+("Polskie Szynki sp.z.o.o.","586985002145","N/A"),
+("Klikanie w komputer S.A.","200245599966","IT")
