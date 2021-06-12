@@ -1,6 +1,5 @@
 package app;
 
-import app.data.Klient;
 import app.database.DatabaseConnector;
 import gui.GUI;
 import gui.Login;
@@ -14,8 +13,7 @@ public class Main {
 
 
         // test
-//        DatabaseConnector.getClients();
-//        System.out.println(Klient.all_clients);
+//        DatabaseConnector.getTrainers();
 //        System.exit(0);
         /////////////
 

@@ -1,13 +1,13 @@
 package app.tables;
 
-import app.data.Client;
+import app.data.Trainer;
 
 import javax.swing.table.AbstractTableModel;
 
-public class ClientTableModel extends AbstractTableModel {
+public class TrainerTableModel extends AbstractTableModel {
     @Override
     public int getRowCount() {
-        return Client.all_clients.size();
+        return Trainer.allTrainers.size();
     }
 
     @Override
@@ -17,32 +17,30 @@ public class ClientTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Client client = Client.all_clients.get(rowIndex);
+        Trainer trainer = Trainer.allTrainers.get(rowIndex);
         switch (columnIndex){
             case 0:
-                return client.id;
+                return trainer.id;
             case 1:
-                return client.imie;
-                
-            case 2: 
-                return client.nazwisko;
-                
+                return trainer.imie;
+
+            case 2:
+                return trainer.nazwisko;
+
             case 3:
-                if(client.getNumer() == 0)
+                if(trainer.getNumer() == 0)
                     return "Nie podano";
-                return client.getNumer();
-                
+                return trainer.getNumer();
+
             case 4:
-                return client.data_ur;
-                
-            case 5: 
-                return client.data_rejestracji;
-                
+                return trainer.data_ur;
+
+            case 5:
+                return trainer.getPoziom();
+
             case 6:
-                if(client.firma_id == 0)
-                    return "N/A";
-                return client.firma_id;
-                
+                return trainer.opis;
+
             default:
                 return "N/A";
         }
@@ -56,8 +54,8 @@ public class ClientTableModel extends AbstractTableModel {
             case 2 -> "NAZWISKO";
             case 3 -> "NUMER";
             case 4 -> "DATA UR.";
-            case 5 -> "DATA REJ.";
-            case 6 -> "FIRMA";
+            case 5 -> "POZIOM";
+            case 6 -> "OPIS";
             default -> "N/A";
         };
     }

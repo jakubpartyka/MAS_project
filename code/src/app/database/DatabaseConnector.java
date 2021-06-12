@@ -1,7 +1,8 @@
 package app.database;
 
 import app.credentials.Hasher;
-import app.data.Klient;
+import app.data.Client;
+import app.data.Trainer;
 
 import java.sql.*;
 
@@ -61,10 +62,28 @@ public class DatabaseConnector {
             Date data_rej = resultSet.getDate(6);
             int firma_id = resultSet.getInt(7);
 
-            Klient klient = new Klient(id,imie,nazwisko,numer,data_ur,data_rej);
-            klient.firma_id = firma_id;
+            Client client = new Client(id,imie,nazwisko,numer,data_ur,data_rej);
+            client.firma_id = firma_id;
         }
 
+        close(connection);
+    }
+
+    public static void getTrainers() throws SQLException {
+        Connection connection = connect();
+        PreparedStatement statement = connection.prepareStatement(Queries.GET_TRAINERS.expression);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()){
+            int id = resultSet.getInt(1);
+            String imie = resultSet.getString(2);
+            String nazwisko = resultSet.getString(3);
+            Date data_ur = resultSet.getDate(4);
+            int numer = resultSet.getInt(5);
+            String poziom = resultSet.getString(6);
+            String opis = resultSet.getString(7);
+
+            new Trainer(id,imie,nazwisko,numer,data_ur,poziom,opis);
+        }
         close(connection);
     }
 

@@ -2,8 +2,10 @@ package gui;
 
 import app.database.DatabaseConnector;
 import app.tables.ClientTableModel;
+import app.tables.TrainerTableModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.time.LocalDate;
 
 public class GUI implements Runnable {
@@ -13,6 +15,7 @@ public class GUI implements Runnable {
     private JLabel statusLabel2;
     private JPanel statusPanel;
     private JTable clientTable;
+    private JTable trenerTable;
 
     private JFrame frame;
 
@@ -33,11 +36,13 @@ public class GUI implements Runnable {
 
     private void prepareTables() {
         clientTable.setModel(new ClientTableModel());
+        trenerTable.setModel(new TrainerTableModel());
     }
 
     private void getData() {
         try {
             DatabaseConnector.getClients();
+            DatabaseConnector.getTrainers();
         } catch (Exception e){
             JOptionPane.showMessageDialog(null,"Failed to connect to database","ERROR",JOptionPane.ERROR_MESSAGE);
             System.exit(1);
@@ -48,6 +53,7 @@ public class GUI implements Runnable {
         frame = new JFrame("WKS Warszawianka - panel zarządzania");
         frame.add(mainPanel);
         frame.setSize(800,600);
+        frame.setMinimumSize(new Dimension(400,300));
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(true);
