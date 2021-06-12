@@ -37,4 +37,9 @@ public class CompanyTableModel extends AbstractTableModel {
             default -> "N/A";
         };
     }
+
+    @Override
+    public void fireTableDataChanged() {
+        super.fireTableDataChanged();
+    }
 }

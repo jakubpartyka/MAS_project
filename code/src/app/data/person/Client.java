@@ -15,6 +15,14 @@ public class Client extends Person {
         all_clients.add(this);
     }
 
+    public static Client getClientById(int id){
+        for (Client client : all_clients) {
+            if(client.id == id)
+                return client;
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Klient{" +

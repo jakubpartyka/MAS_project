@@ -49,6 +49,11 @@ public class ClientTableModel extends AbstractTableModel {
     }
 
     @Override
+    public void fireTableDataChanged() {
+        super.fireTableDataChanged();
+    }
+
+    @Override
     public String getColumnName(int column) {
         return switch (column) {
             case 0 -> "ID";

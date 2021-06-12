@@ -5,8 +5,6 @@ import app.data.Company;
 import app.data.Court;
 import app.data.person.Client;
 import app.data.person.Trainer;
-
-import java.io.FileReader;
 import java.sql.*;
 
 public class DatabaseConnector {
@@ -142,5 +140,25 @@ public class DatabaseConnector {
 
         //verify if password correct
         return db_pass.equals(hashed_pass);
+    }
+
+    public static void addCompany(Company company) throws SQLException {
+        Connection connection = connect();
+        PreparedStatement statement = connection.prepareStatement(Queries.ADD_COMPANY.expression);
+        statement.setString(1,company.nazwa);
+        statement.setString(2,company.NIP);
+        statement.setString(3,company.branza);
+        statement.executeUpdate();
+        close(connection);
+    }
+
+    public static void updateClient(Client client) throws SQLException {
+        Connection connection = connect();
+        PreparedStatement statement = connection.prepareStatement(Queries.UPDATE_CLIENT.expression);
+        statement.setInt(1,client.getNumer());
+        statement.setInt(2,client.firma_id);
+        statement.setInt(3,client.id);
+        statement.executeUpdate();
+        close(connection);
     }
 }
