@@ -25,3 +25,11 @@ INSERT INTO Klient (imie,nazwisko,data_ur,numer,data_rejestracji) VALUES
 ("Janina","Staropolska","1991-07-07",391758642,"2017-03-18"),
 ("Wiktor","Elokwentny","1997-12-04",938265714,"2018-12-26")
 
+-- populate trainer
+INSERT INTO Trener (imie,nazwisko,data_ur,numer,poziom,opis) VALUES
+("Paweł","Jankowski","1985-03-16",523619478,"DZIECI,POCZATKUJACY","Jestem Paweł i nauczę Cię grać w tenisa"),
+("Aleksandra","Drożdż","1989-12-03",741852363,"POCZATKUJACY,SREDNIOZAAWANSOWANY","Jestem Ola i szybko biegam"),
+("Mateusz","Dziubek","1985-03-16",523619478,"ZAAWANSOWANY","Jestem Mateusz i uczę grać profesjonalistów"),
+("Francois","De la France","1979-04-20",593826471,"SREDNIOZAAWANSOWANY, ZAAWANSOWANY","Je parle francais"),
+("Katarzyna","Wciśło","1992-10-01",7485321369,"DZIECI,POCZATKUJACY,SREDNIOZAAWANSOWANY","Jestem Kasia"),
+
