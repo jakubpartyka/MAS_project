@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2021-06-12 09:49:12.0
+-- Last modification date: 2021-06-12 11:46:49.606
 
 -- tables
 -- Table: Administracja
@@ -11,7 +11,7 @@ CREATE TABLE Administracja (
 
 -- Table: Firma
 CREATE TABLE Firma (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     nazwa varchar(255) NOT NULL,
     NIP varchar(12) NOT NULL,
     branza varchar(255) NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE Firma (
 
 -- Table: Klient
 CREATE TABLE Klient (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     imie int NOT NULL,
     nazwisko int NOT NULL,
     data_ur date NULL,
@@ -32,7 +32,7 @@ CREATE TABLE Klient (
 
 -- Table: Kort
 CREATE TABLE Kort (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     nawierzchnia varchar(255) NOT NULL,
     cena int NOT NULL,
     oswietlenie bool NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE Ksiegowy (
 
 -- Table: Podwykonawca
 CREATE TABLE Podwykonawca (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     NIP int NOT NULL,
     zakres varchar(1000) NOT NULL,
     numer int NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE Podwykonawca (
 
 -- Table: Prace_techniczne
 CREATE TABLE Prace_techniczne (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     od date NOT NULL,
     do date NOT NULL,
     opis varchar(5000) NULL,
@@ -77,7 +77,7 @@ CREATE TABLE Prace_techniczne (
 
 -- Table: Pracownik
 CREATE TABLE Pracownik (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     imie int NOT NULL,
     nazwisko int NOT NULL,
     data_ur date NULL,
@@ -103,7 +103,7 @@ CREATE TABLE Recepcjonista (
 
 -- Table: Rezerwacja
 CREATE TABLE Rezerwacja (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     Kort_id int NOT NULL,
     Klient_id int NOT NULL,
     Trener_id int NULL,
@@ -116,7 +116,7 @@ CREATE TABLE Rezerwacja (
 
 -- Table: Trener
 CREATE TABLE Trener (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     imie int NOT NULL,
     nazwisko int NOT NULL,
     data_ur date NULL,
@@ -128,7 +128,7 @@ CREATE TABLE Trener (
 
 -- Table: Urlop
 CREATE TABLE Urlop (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     typ varchar(255) NOT NULL,
     od date NOT NULL,
     do date NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE Urlop (
 
 -- Table: Wydarzenie
 CREATE TABLE Wydarzenie (
-    id int NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     Firma_id int NOT NULL,
     nazwa varchar(255) NOT NULL,
     ilosc int NOT NULL,
