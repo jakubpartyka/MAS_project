@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2021-06-12 11:46:49.606
+-- Last modification date: 2021-06-12 12:26:33.649
 
 -- tables
 -- Table: Administracja
@@ -21,8 +21,8 @@ CREATE TABLE Firma (
 -- Table: Klient
 CREATE TABLE Klient (
     id int NOT NULL AUTO_INCREMENT,
-    imie int NOT NULL,
-    nazwisko int NOT NULL,
+    imie varchar(100) NOT NULL,
+    nazwisko varchar(100) NOT NULL,
     data_ur date NULL,
     numer varchar(30) NULL,
     data_rejestracji date NOT NULL,
@@ -78,8 +78,8 @@ CREATE TABLE Prace_techniczne (
 -- Table: Pracownik
 CREATE TABLE Pracownik (
     id int NOT NULL AUTO_INCREMENT,
-    imie int NOT NULL,
-    nazwisko int NOT NULL,
+    imie varchar(100) NOT NULL,
+    nazwisko varchar(100) NOT NULL,
     data_ur date NULL,
     numer varchar(30) NULL,
     data_zatrudnienia date NOT NULL,
@@ -117,8 +117,8 @@ CREATE TABLE Rezerwacja (
 -- Table: Trener
 CREATE TABLE Trener (
     id int NOT NULL AUTO_INCREMENT,
-    imie int NOT NULL,
-    nazwisko int NOT NULL,
+    imie varchar(100) NOT NULL,
+    nazwisko varchar(100) NOT NULL,
     data_ur date NULL,
     numer varchar(30) NULL,
     poziom varchar(1000) NOT NULL,
