@@ -1,17 +1,18 @@
 package app;
 
-import app.database.DatabaseConnector;
 import gui.GUI;
 import gui.Login;
 
 import javax.swing.*;
 
+@SuppressWarnings("BusyWait")
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         // SHOW LOGIN
         Login login = new Login();
         Thread loginThread = new Thread(login);
         loginThread.start();
+
         while (loginThread.isAlive())
             Thread.sleep(200);
 
