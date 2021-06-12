@@ -1,5 +1,6 @@
 package app.tables;
 
+import app.data.Company;
 import app.data.person.Client;
 
 import javax.swing.table.AbstractTableModel;
@@ -40,8 +41,12 @@ public class ClientTableModel extends AbstractTableModel {
                 
             case 6:
                 if(client.firma_id == 0)
-                    return "N/A";
-                return client.firma_id;
+                    return "-";
+                Company company = Company.getCompanyById(client.firma_id);
+                if(company != null)
+                    return company.nazwa;
+                else
+                    return "-";
                 
             default:
                 return "N/A";

@@ -16,4 +16,12 @@ public class Company {
 
         allCompanies.add(this);
     }
+
+    public static Company getCompanyById(int id){
+        for (Company company : allCompanies) {
+            if(company.id == id)
+                return company;
+        }
+        return null;
+    }
 }
