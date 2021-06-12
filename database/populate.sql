@@ -33,3 +33,25 @@ INSERT INTO Trener (imie,nazwisko,data_ur,numer,poziom,opis) VALUES
 ("Francois","De la France","1979-04-20",593826471,"SREDNIOZAAWANSOWANY, ZAAWANSOWANY","Je parle francais"),
 ("Katarzyna","Wciśło","1992-10-01",7485321369,"DZIECI,POCZATKUJACY,SREDNIOZAAWANSOWANY","Jestem Kasia"),
 
+-- populate court
+INSERT INTO Kort (nawierzchnia,cena,oswietlenie,kryty) VALUES 
+("MACZKA",150,1,1),
+("MACZKA",150,1,1),
+("MACZKA",150,0,1),
+("MACZKA",150,0,1),
+("MACZKA",150,0,1),
+("MACZKA",150,1,0),
+("MACZKA",150,1,0),
+("MACZKA",150,1,0),
+("MACZKA",150,0,0),
+("MACZKA",150,0,0),
+("MACZKA",150,0,0),
+("LINOLEUM",170,1,1),
+("LINOLEUM",170,0,1),
+("LINOLEUM",170,0,1),
+("LINOLEUM",200,1,0),
+("LINOLEUM",200,1,0),
+("LINOLEUM",200,1,1),
+("TRAWA",250,1,0),
+("TRAWA",250,1,0),
+("TRAWA",250,1,0)
