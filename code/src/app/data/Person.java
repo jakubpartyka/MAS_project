@@ -3,10 +3,10 @@ package app.data;
 import java.sql.Date;
 
 public abstract class Person {
-    final int id;
+    public final int id;
 
-    String imie,nazwisko;
-    Date data_ur;
+    public String imie,nazwisko;
+    public Date data_ur;
     private int numer;
 
     protected Person(int id, String imie, String nazwisko, int numer, Date data_ur) {

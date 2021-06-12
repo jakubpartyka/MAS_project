@@ -14,9 +14,9 @@ public class Main {
 
 
         // test
-        DatabaseConnector.getClients();
-        System.out.println(Klient.all_clients);
-        System.exit(0);
+//        DatabaseConnector.getClients();
+//        System.out.println(Klient.all_clients);
+//        System.exit(0);
         /////////////
 
 

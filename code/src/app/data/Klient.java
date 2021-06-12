@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Klient extends Person {
     public static ArrayList<Klient> all_clients = new ArrayList<>();
 
-    Date data_rejestracji;
+    public Date data_rejestracji;
     public Integer firma_id;
 
     public Klient(int id, String imie, String nazwisko, int numer, Date data_ur, Date data_rejestracji) {

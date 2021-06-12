@@ -31,7 +31,12 @@
                 </constraints>
                 <properties/>
                 <border type="none"/>
-                <children/>
+                <children>
+                  <component id="bc526" class="javax.swing.JTable" binding="clientTable">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
               </scrollpane>
             </children>
           </grid>
