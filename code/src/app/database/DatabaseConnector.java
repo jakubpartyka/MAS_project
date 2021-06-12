@@ -1,10 +1,12 @@
 package app.database;
 
 import app.credentials.Hasher;
+import app.data.Company;
 import app.data.Court;
 import app.data.person.Client;
 import app.data.person.Trainer;
 
+import java.io.FileReader;
 import java.sql.*;
 
 public class DatabaseConnector {
@@ -99,6 +101,19 @@ public class DatabaseConnector {
             boolean oswietlenie = resultSet.getBoolean(4);
             boolean kryty = resultSet.getBoolean(4);
             new Court(id,cena,nawierzchnia,oswietlenie,kryty);
+        }
+    }
+
+    public static void getCompanies() throws SQLException {
+        Connection connection = connect();
+        PreparedStatement statement = connection.prepareStatement(Queries.GET_COMPANIES.expression);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()){
+            int id = resultSet.getInt(1);
+            String nazwa = resultSet.getString(2);
+            String nip = resultSet.getString(3);
+            String branza = resultSet.getString(4);
+            new Company(id,nazwa,nip,branza);
         }
     }
 
