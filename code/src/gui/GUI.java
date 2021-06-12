@@ -10,10 +10,11 @@ import app.tables.TrainerTableModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class GUI implements Runnable {
     private JTabbedPane tabbedPane1;
     private JPanel mainPanel;
@@ -30,6 +31,13 @@ public class GUI implements Runnable {
     private JTextField nipField;
     private JButton zapiszButton;
     private JLabel firmaStatusLabel;
+    private JTextField klientImieField;
+    private JTextField klientNazwiskoField;
+    private JTextField klientUrField;
+    private JTextField klientNumerField;
+    private JLabel klientStatusLabel;
+    private JComboBox klientFirmaBox;
+    private JButton addClientButton;
 
     private JFrame frame;
 
@@ -108,21 +116,83 @@ public class GUI implements Runnable {
             nipField.setText("");
             branzaField.setText("");
             przedstawicielBox.setSelectedItem("-- brak --");
+        });
+
+        addClientButton.addActionListener(e -> {
+            klientStatusLabel.setText("");
+            klientStatusLabel.setForeground(Color.RED);
+
+            // validate
+            if (klientImieField.getText().isBlank() || klientNazwiskoField.getText().isBlank()
+                    || klientNumerField.getText().isBlank() || klientUrField.getText().isBlank()){
+                klientStatusLabel.setText("Proszę wypełnić wszystkie pola");
+                return;
+            }
+
+            String imie = klientImieField.getText();
+            String nazwisko = klientNazwiskoField.getText();
+            Date data_ur;
+            int numer;
+            try {
+                data_ur = Date.valueOf(klientUrField.getText());
+            } catch (IllegalArgumentException exception){
+                klientStatusLabel.setText("Data urodzenia powinna być zapisana w formacie rrrr-mm-dd");
+                return;
+            }
+            try{
+                numer = Integer.parseInt(klientNumerField.getText());
+            } catch (NumberFormatException exception){
+                klientStatusLabel.setText("Proszę podać poprawny numer telefonu");
+                return;
+            }
+            Client client = new Client(-1,imie,nazwisko,numer,data_ur,Date.valueOf(LocalDate.now()));
+
+            try {
+                DatabaseConnector.createClient(client);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+                JOptionPane.showMessageDialog(null,"Failed to create entry due to: " + throwables.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // update client table
+            Client.all_clients.clear();
+            try {
+                DatabaseConnector.getClients();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            ((ClientTableModel)clientTable.getModel()).fireTableDataChanged();
 
 
+            // clear input fields
+            klientImieField.setText("");
+            klientNazwiskoField.setText("");
+            klientUrField.setText("");
+            klientNumerField.setText("");
+            klientFirmaBox.setSelectedItem("-- brak --");
         });
     }
 
     private void prepareComboBox() {
+        przedstawicielBox.removeAllItems();
+        klientFirmaBox.removeAllItems();
+
+        // Dodaj firmę
         przedstawicielBox.addItem("-- brak --");
         for (Client client : Client.all_clients) {
-
             // one client can be representing at most one company
             if(client.firma_id != 0)
                 continue;
 
             String selectionString = client.imie + " " + client.nazwisko + " (" + client.id + ")";
             przedstawicielBox.addItem(selectionString);
+        }
+
+        // Dodaj klienta
+        klientFirmaBox.addItem("-- brak --");
+        for (Company company : Company.allCompanies) {
+            klientFirmaBox.addItem(company.nazwa);
         }
     }
 

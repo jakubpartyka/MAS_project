@@ -161,4 +161,16 @@ public class DatabaseConnector {
         statement.executeUpdate();
         close(connection);
     }
+
+    public static void createClient(Client client) throws SQLException {
+        Connection connection = connect();
+        PreparedStatement statement = connection.prepareStatement(Queries.CREATE_CLIENT.expression);
+        statement.setString(1,client.imie);
+        statement.setString(2,client.nazwisko);
+        statement.setDate(3,client.data_ur);
+        statement.setInt(4,client.getNumer());
+        statement.setDate(5,client.data_rejestracji);
+        statement.executeUpdate();
+        close(connection);
+    }
 }
