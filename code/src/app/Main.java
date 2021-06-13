@@ -24,7 +24,7 @@ public class Main {
         loginThread.start();
 
         while (loginThread.isAlive())
-            Thread.sleep(200);
+            Thread.sleep(50);
 
         // in case that login thread failed but user did not authorize - exit
         if (!login.isAuthorized()) {

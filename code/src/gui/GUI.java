@@ -53,6 +53,14 @@ public class GUI implements Runnable {
 
         initFrame();
 
+//        for (int i = 0; i < 4; i++) {
+//            tabbedPane1.setBackgroundAt(i,Color.BLUE);
+//        }
+        for (int i = 4; i < 6; i++) {
+            tabbedPane1.setBackgroundAt(i,Color.GREEN);
+        }
+
+
         statusLabel1.setText("Zalogowany jako: " + DatabaseConnector.current_user);
         statusLabel2.setText(String.valueOf(LocalDate.now()));
 
