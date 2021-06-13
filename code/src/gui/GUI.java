@@ -9,6 +9,8 @@ import app.tables.CourtTableModel;
 import app.tables.TrainerTableModel;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -201,6 +203,11 @@ public class GUI implements Runnable {
         trainerTable.setModel(new TrainerTableModel());
         courtTable.setModel(new CourtTableModel());
         companyTable.setModel(new CompanyTableModel());
+
+        resizeColumnWidth(clientTable);
+        resizeColumnWidth(trainerTable);
+        resizeColumnWidth(courtTable);
+        resizeColumnWidth(companyTable);
     }
 
     private void getData() {
@@ -224,5 +231,20 @@ public class GUI implements Runnable {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setAlwaysOnTop(false);
+    }
+
+    public void resizeColumnWidth(JTable table) {
+        final TableColumnModel columnModel = table.getColumnModel();
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            int width = 10; // Min width
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                Component comp = table.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width +1 , width);
+            }
+            if(width > 300)
+                width=300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
     }
 }

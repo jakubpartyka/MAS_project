@@ -44,7 +44,6 @@ public class Login implements Runnable{
         passwordField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                System.out.println(e.getKeyCode());
                 if(e.getKeyCode() == 10)
                     zalogujButton.doClick();
             }
