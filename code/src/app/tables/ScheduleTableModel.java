@@ -20,24 +20,32 @@ public class ScheduleTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        if (columnIndex == 0) {
-            switch (rowIndex){
-                case 0: return "10:00";
-                case 1: return "11:00";
-                case 2: return "12:00";
-                case 3: return "13:00";
-                case 4: return "14:00";
-                case 5: return "15:00";
-                case 6: return "16:00";
-                case 7: return "17:00";
-                case 8: return "18:00";
-            }
-        }
+        String time = switch (rowIndex) {
+            case 0 -> "10:00";
+            case 1 -> "11:00";
+            case 2 -> "12:00";
+            case 3 -> "13:00";
+            case 4 -> "14:00";
+            case 5 -> "15:00";
+            case 6 -> "16:00";
+            case 7 -> "17:00";
+            case 8 -> "18:00";
+            default -> "";
+        };
+
+        // time column
+        if (columnIndex == 0)
+            return time;
+
+        // all other columns
         else {
             int kort_id = columnIndex;
             Date date = Date.valueOf(GUI.currentDate.toString());
-            return date;
 
+            for (Reservation reservation : Reservation.allReservations) {
+                if(reservation.data.equals(date) && reservation.kortId == kort_id && reservation.timeInBetween(time))
+                    return reservation.id;
+            }
         }
         return "-";
     }
