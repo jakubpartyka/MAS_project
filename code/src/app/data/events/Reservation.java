@@ -1,10 +1,9 @@
 package app.data.events;
 
-import app.data.Court;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Reservation {
     public static ArrayList<Reservation> allReservations = new ArrayList<>();
@@ -58,5 +57,18 @@ public class Reservation {
         if(this.czas_do.getTime() > from.getTime())
             return true;
         return this.czas_od.getTime() < to.getTime();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return id == that.id && kortId == that.kortId && klientId == that.klientId && trenerId == that.trenerId && Objects.equals(data, that.data) && Objects.equals(czas_od, that.czas_od) && Objects.equals(czas_do, that.czas_do) && status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, kortId, klientId, trenerId, data, czas_od, czas_do, status);
     }
 }

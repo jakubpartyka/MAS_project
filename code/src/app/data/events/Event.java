@@ -5,11 +5,22 @@ import app.data.Company;
 import java.util.ArrayList;
 
 public class Event {
-    ArrayList<Event> wydarzenia = new ArrayList<>();
+    public static ArrayList<Event> wydarzenia = new ArrayList<>();
 
-    int id;
-    Company company;
-    String name;
-    int participants;
-    boolean buffet;
+    public ArrayList<Reservation> reservations = new ArrayList<>();
+
+    public int id;
+    public Company company;
+    public String name;
+    public int participants;
+    public boolean buffet = false;
+
+    public static ArrayList<Event> getEventsForReservation(Reservation reservation){
+        ArrayList<Event> result = new ArrayList<>();
+        for (Event event : wydarzenia) {
+            if(event.reservations.contains(reservation))
+                result.add(event);
+        }
+        return result;
+    }
 }
