@@ -39,11 +39,10 @@ public class ScheduleTableModel extends AbstractTableModel {
 
         // all other columns
         else {
-            int kort_id = columnIndex;
             Date date = Date.valueOf(GUI.currentDate.toString());
 
             for (Reservation reservation : Reservation.allReservations) {
-                if(reservation.data.equals(date) && reservation.kortId == kort_id && reservation.timeInBetween(time))
+                if(reservation.data.equals(date) && reservation.kortId == columnIndex && reservation.timeInBetween(time))
                     return "ZAJĘTY :" + reservation.id;          // text to be show in occupied reservation cell
             }
         }

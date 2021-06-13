@@ -2,20 +2,15 @@ package gui;
 
 import app.data.Company;
 import app.data.events.Reservation;
-import app.data.events.ReservationStatus;
 import app.data.person.Client;
 import app.database.DatabaseConnector;
 import app.tables.*;
-
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
@@ -56,6 +51,16 @@ public class GUI implements Runnable {
     private JLabel detailsClientPhone;
     private JLabel detailsResStatus;
     private JLabel detailsHeader;
+    private JComboBox fromComboBox;
+    private JComboBox toComboBox;
+    private JComboBox clientComboBox;
+    private JLabel reserveStatusLabel;
+    private JLabel sumLabel;
+    private JComboBox trainerComboBox;
+    private JComboBox courtComboBox;
+    private JTextField reserveDateField;
+    private JButton saveReservationButton;
+    private JButton checkAvailabilityButton;
 
     private JFrame frame;
 
@@ -246,6 +251,12 @@ public class GUI implements Runnable {
         for (Company company : Company.allCompanies) {
             klientFirmaBox.addItem(company.nazwa);
         }
+
+        // Zarezerwuj
+        for (int i = 0; i < 9; i++) {
+            fromComboBox.addItem("1" + i + ":00");
+            toComboBox.addItem("1" + i + ":00");
+        }
     }
 
     private void prepareTables() {
@@ -298,7 +309,6 @@ public class GUI implements Runnable {
             detailsClientName.setText("KLIENT: " + client.imie + " " + client.nazwisko);
             detailsClientPhone.setText("TELEFON: " + client.getNumer());
             detailsResStatus.setText("STATUS: " + res.status);
-
         }
     }
 
