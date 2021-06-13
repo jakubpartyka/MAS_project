@@ -1,8 +1,10 @@
 package gui;
 
 import app.data.Company;
+import app.data.Court;
 import app.data.events.Reservation;
 import app.data.person.Client;
+import app.data.person.Trainer;
 import app.database.DatabaseConnector;
 import app.tables.*;
 import javax.swing.*;
@@ -11,9 +13,11 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class GUI implements Runnable {
@@ -61,6 +65,8 @@ public class GUI implements Runnable {
     private JTextField reserveDateField;
     private JButton saveReservationButton;
     private JButton checkAvailabilityButton;
+    private JButton calculatePriceButton;
+    private JButton cancelButton;
 
     private JFrame frame;
 
@@ -74,7 +80,7 @@ public class GUI implements Runnable {
 
         initFrame();
 
-        preapareUI();
+        prepareUI();
 
         statusLabel1.setText("Zalogowany jako: " + DatabaseConnector.current_user);
         statusLabel2.setText(String.valueOf(LocalDate.now()));
@@ -83,11 +89,12 @@ public class GUI implements Runnable {
         frame.setVisible(true);
     }
 
-    private void preapareUI() {
-        for (int i = 5; i < 7; i++)
+    private void prepareUI() {
+        for (int i = 5; i < 8; i++)
             tabbedPane1.setBackgroundAt(i,Color.GREEN);
 
         targetDateField.setText(currentDate.toString());
+        reserveDateField.setText(currentDate.toString());
     }
 
     private void addActionListeners() {
@@ -229,6 +236,136 @@ public class GUI implements Runnable {
                 scheduleStatusLabel.setText("Data powinna zostać podana w formacie rrrr-mm-dd");
             }
         });
+
+        checkAvailabilityButton.addActionListener(e -> {
+            reserveStatusLabel.setText("");
+            Date date;
+
+            // check if date was entered properly
+            try {
+                date = Date.valueOf(reserveDateField.getText());
+            } catch (Exception exception){
+                reserveStatusLabel.setText("Data powinna mieć format rrrr-mm-dd");
+                return;
+            }
+
+            // check if date is future
+            if(date.getTime() < Date.valueOf(LocalDate.now()).getTime()){
+                reserveStatusLabel.setText("Wybierz przyszłą datę!");
+                return;
+            }
+
+            // check if hours were selected properly
+            Time from = Time.valueOf(fromComboBox.getSelectedItem().toString() + ":00");
+            Time to = Time.valueOf(toComboBox.getSelectedItem().toString() + ":00");
+            if(from.getTime() >= to.getTime()){
+                reserveStatusLabel.setText("Podaj poprawne godziny");
+                return;
+            }
+
+
+            // CHECK AVAILABILITY
+            ArrayList<Court> availableCourts = new ArrayList<>(Court.allCourts);
+            ArrayList<Trainer> availableTrainers = new ArrayList<>(Trainer.allTrainers);
+
+            ArrayList<Reservation> chosenDayReservations = new ArrayList<>();
+
+            for (Reservation reservation : Reservation.allReservations) {
+                if(reservation.data.equals(date))
+                    chosenDayReservations.add(reservation);
+            }
+
+            // remove courts that are occupied in specified time
+            for (Reservation thisDayReservation : chosenDayReservations) {
+                if(thisDayReservation.collisionWith(from,to)) {
+                    Court court = Court.getCourtById(thisDayReservation.kortId);
+                    availableCourts.remove(court);
+                }
+            }
+
+            // enable buttons
+            saveReservationButton.setEnabled(true);
+            calculatePriceButton.setEnabled(true);
+            trainerComboBox.setEnabled(true);
+            courtComboBox.setEnabled(true);
+            // disable previous fields
+            reserveDateField.setEnabled(false);
+            fromComboBox.setEnabled(false);
+            toComboBox.setEnabled(false);
+            checkAvailabilityButton.setEnabled(false);
+            clientComboBox.setEnabled(true);
+
+            // add available items to combo boxes
+            if(availableCourts.isEmpty()){
+                courtComboBox.addItem("-- brak --");
+                reserveStatusLabel.setText("Brak wolnych kortów w wybranym terminie");
+                saveReservationButton.setEnabled(false);
+                calculatePriceButton.setEnabled(false);
+            }
+            else {
+                for (Court availableCourt : availableCourts) {
+                    courtComboBox.addItem("Kort " + availableCourt.id);
+                }
+            }
+
+            //todo trainer availability
+            if(availableTrainers.isEmpty()){
+                trainerComboBox.addItem("-- brak --");
+                reserveStatusLabel.setText("Brak wolnych trenerów w wybranym terminie");
+                saveReservationButton.setEnabled(false);
+                calculatePriceButton.setEnabled(false);
+            }
+            else {
+                trainerComboBox.addItem("-- bez trenera --");
+                for (Trainer availableTrainer : availableTrainers) {
+                    trainerComboBox.addItem(availableTrainer.imie + " " + availableTrainer.nazwisko + " (" + availableTrainer.id + ")");
+                }
+            }
+        });
+
+        cancelButton.addActionListener(e -> {
+            reserveDateField.setText(currentDate.toString());
+            reserveDateField.setEnabled(true);
+            fromComboBox.setSelectedItem("10:00");
+            toComboBox.setSelectedItem("10:00");
+            toComboBox.setEnabled(true);
+            fromComboBox.setEnabled(true);
+            checkAvailabilityButton.setEnabled(true);
+            courtComboBox.removeAllItems();
+            courtComboBox.setEnabled(false);
+            trainerComboBox.removeAllItems();
+            trainerComboBox.setEnabled(false);
+            clientComboBox.setEnabled(false);
+            sumLabel.setText("-");
+            saveReservationButton.setEnabled(false);
+            calculatePriceButton.setEnabled(false);
+            clientComboBox.setEnabled(false);
+        });
+
+        calculatePriceButton.addActionListener(e -> {
+            int selectedCourtId = 0;
+            try {
+                String tmp = (String)courtComboBox.getSelectedItem();
+                if (tmp==null || tmp.isBlank())
+                    throw new Exception("Nie wybrano kortu!");
+                selectedCourtId = Integer.parseInt(tmp.split(" ")[1]);
+            } catch (Exception exception){
+                reserveStatusLabel.setText("Nie można obliczyć ceny. Błąd: " + exception.getMessage());
+            }
+
+            Court selectedCourt = Court.getCourtById(selectedCourtId);
+            if(selectedCourt == null){
+                reserveStatusLabel.setText("Nie można obliczyć ceny. Błąd: Nie wybrano kortu");
+                return;
+            }
+            //noinspection ConstantConditions
+            int a = Integer.parseInt(((String)fromComboBox.getSelectedItem()).substring(0,2));
+            //noinspection ConstantConditions
+            int b = Integer.parseInt(((String)toComboBox.getSelectedItem()).substring(0,2));
+            int length = b - a;
+            int price = length * selectedCourt.cena;
+            sumLabel.setText(price + " PLN");
+        });
     }
 
     private void prepareComboBox() {
@@ -256,6 +393,9 @@ public class GUI implements Runnable {
         for (int i = 0; i < 9; i++) {
             fromComboBox.addItem("1" + i + ":00");
             toComboBox.addItem("1" + i + ":00");
+        }
+        for (Client client : Client.all_clients) {
+            clientComboBox.addItem(client.imie + " " + client.nazwisko + " (" + client.id + ")");
         }
     }
 

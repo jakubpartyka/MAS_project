@@ -1,5 +1,7 @@
 package app.data.events;
 
+import app.data.Court;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -50,5 +52,11 @@ public class Reservation {
                 ", czas_do=" + czas_do +
                 ", status=" + status +
                 '}';
+    }
+
+    public boolean collisionWith(Time from, Time to) {
+        if(this.czas_do.getTime() > from.getTime())
+            return true;
+        return this.czas_od.getTime() < to.getTime();
     }
 }
