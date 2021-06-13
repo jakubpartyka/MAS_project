@@ -26,7 +26,6 @@ public class GUI implements Runnable {
     private JPanel mainPanel;
     private JLabel statusLabel1;
     private JLabel statusLabel2;
-    private JPanel statusPanel;
     private JTable clientTable;
     private JTable trainerTable;
     private JTable courtTable;
@@ -256,7 +255,9 @@ public class GUI implements Runnable {
             }
 
             // check if hours were selected properly
+            //noinspection ConstantConditions
             Time from = Time.valueOf(fromComboBox.getSelectedItem().toString() + ":00");
+            //noinspection ConstantConditions
             Time to = Time.valueOf(toComboBox.getSelectedItem().toString() + ":00");
             if(from.getTime() >= to.getTime()){
                 reserveStatusLabel.setText("Podaj poprawne godziny");
