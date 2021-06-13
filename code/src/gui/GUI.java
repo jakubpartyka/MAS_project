@@ -5,10 +5,7 @@ import app.data.events.Reservation;
 import app.data.events.ReservationStatus;
 import app.data.person.Client;
 import app.database.DatabaseConnector;
-import app.tables.ClientTableModel;
-import app.tables.CompanyTableModel;
-import app.tables.CourtTableModel;
-import app.tables.TrainerTableModel;
+import app.tables.*;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -16,10 +13,14 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class GUI implements Runnable {
+    public static LocalDate currentDate = LocalDate.now();
     private JTabbedPane tabbedPane1;
     private JPanel mainPanel;
     private JLabel statusLabel1;
@@ -61,18 +62,20 @@ public class GUI implements Runnable {
 
         initFrame();
 
-//        for (int i = 0; i < 4; i++) {
-//            tabbedPane1.setBackgroundAt(i,Color.BLUE);
-//        }
-        for (int i = 5; i < 7; i++) {
-            tabbedPane1.setBackgroundAt(i,Color.GREEN);
-        }
+        preapareUI();
 
         statusLabel1.setText("Zalogowany jako: " + DatabaseConnector.current_user);
         statusLabel2.setText(String.valueOf(LocalDate.now()));
 
 
         frame.setVisible(true);
+    }
+
+    private void preapareUI() {
+        for (int i = 5; i < 7; i++)
+            tabbedPane1.setBackgroundAt(i,Color.GREEN);
+
+        targetDateField.setText(currentDate.toString());
     }
 
     private void addActionListeners() {
@@ -189,6 +192,31 @@ public class GUI implements Runnable {
             klientNumerField.setText("");
             klientFirmaBox.setSelectedItem("-- brak --");
         });
+
+        goLeftButton.addActionListener(e -> {
+            scheduleStatusLabel.setText("");
+            currentDate = currentDate.minus(1, ChronoUnit.DAYS);
+            targetDateField.setText(currentDate.toString());
+            ((ScheduleTableModel)scheduleTable.getModel()).fireTableDataChanged();
+        });
+
+        goRightButton.addActionListener(e -> {
+            scheduleStatusLabel.setText("");
+            currentDate = currentDate.plus(1,ChronoUnit.DAYS);
+            targetDateField.setText(currentDate.toString());
+            ((ScheduleTableModel)scheduleTable.getModel()).fireTableDataChanged();
+        });
+
+        goButton.addActionListener(e -> {
+            try {
+                currentDate = LocalDate.parse(targetDateField.getText());
+                scheduleStatusLabel.setText("");
+                ((ScheduleTableModel)scheduleTable.getModel()).fireTableDataChanged();
+            } catch (DateTimeParseException e1){
+                e1.printStackTrace();
+                scheduleStatusLabel.setText("Data powinna zostać podana w formacie rrrr-mm-dd");
+            }
+        });
     }
 
     private void prepareComboBox() {
@@ -218,11 +246,13 @@ public class GUI implements Runnable {
         trainerTable.setModel(new TrainerTableModel());
         courtTable.setModel(new CourtTableModel());
         companyTable.setModel(new CompanyTableModel());
+        scheduleTable.setModel(new ScheduleTableModel());
 
         resizeColumnWidth(clientTable);
         resizeColumnWidth(trainerTable);
         resizeColumnWidth(courtTable);
         resizeColumnWidth(companyTable);
+        resizeColumnWidth(scheduleTable);
     }
 
     private void getData() {
