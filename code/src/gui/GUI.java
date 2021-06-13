@@ -1,6 +1,8 @@
 package gui;
 
 import app.data.Company;
+import app.data.events.Reservation;
+import app.data.events.ReservationStatus;
 import app.data.person.Client;
 import app.database.DatabaseConnector;
 import app.tables.ClientTableModel;
@@ -40,6 +42,12 @@ public class GUI implements Runnable {
     private JLabel klientStatusLabel;
     private JComboBox klientFirmaBox;
     private JButton addClientButton;
+    private JTextField targetDateField;
+    private JButton goButton;
+    private JTable scheduleTable;
+    private JLabel scheduleStatusLabel;
+    private JButton goLeftButton;
+    private JButton goRightButton;
 
     private JFrame frame;
 
@@ -56,10 +64,9 @@ public class GUI implements Runnable {
 //        for (int i = 0; i < 4; i++) {
 //            tabbedPane1.setBackgroundAt(i,Color.BLUE);
 //        }
-        for (int i = 4; i < 6; i++) {
+        for (int i = 5; i < 7; i++) {
             tabbedPane1.setBackgroundAt(i,Color.GREEN);
         }
-
 
         statusLabel1.setText("Zalogowany jako: " + DatabaseConnector.current_user);
         statusLabel2.setText(String.valueOf(LocalDate.now()));
@@ -224,6 +231,8 @@ public class GUI implements Runnable {
             DatabaseConnector.getTrainers();
             DatabaseConnector.getCourts();
             DatabaseConnector.getCompanies();
+            DatabaseConnector.getReservations();
+            System.out.println(Reservation.allReservations);
         } catch (Exception e){
             JOptionPane.showMessageDialog(null,"Failed to connect to database","ERROR",JOptionPane.ERROR_MESSAGE);
             System.exit(1);

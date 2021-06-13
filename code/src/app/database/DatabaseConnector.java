@@ -3,6 +3,8 @@ package app.database;
 import app.credentials.Hasher;
 import app.data.Company;
 import app.data.Court;
+import app.data.events.Reservation;
+import app.data.events.ReservationStatus;
 import app.data.person.Client;
 import app.data.person.Trainer;
 import java.sql.*;
@@ -113,6 +115,25 @@ public class DatabaseConnector {
             String branza = resultSet.getString(4);
             new Company(id,nazwa,nip,branza);
         }
+    }
+
+    public static void getReservations() throws SQLException{
+        Connection connection = connect();
+        PreparedStatement statement = connection.prepareStatement(Queries.GET_RESERVATIONS.expression);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()){
+            int id = resultSet.getInt(1);
+            int klient_id = resultSet.getInt(2);
+            int kort_id = resultSet.getInt(3);
+            int trener_id = resultSet.getInt(4);
+            Date data = resultSet.getDate(5);
+            Time czas_od = resultSet.getTime(6);
+            Time czas_do = resultSet.getTime(7);
+            String status = resultSet.getString(8);
+
+            new Reservation(id,klient_id,kort_id,trener_id,data,czas_od,czas_do, ReservationStatus.valueOf(status));
+        }
+        close(connection);
     }
 
     public static boolean authorize(String user, String pass) throws SQLException {
