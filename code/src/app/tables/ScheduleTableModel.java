@@ -44,7 +44,7 @@ public class ScheduleTableModel extends AbstractTableModel {
 
             for (Reservation reservation : Reservation.allReservations) {
                 if(reservation.data.equals(date) && reservation.kortId == kort_id && reservation.timeInBetween(time))
-                    return reservation.id;
+                    return "ZAJĘTY :" + reservation.id;          // text to be show in occupied reservation cell
             }
         }
         return "-";

@@ -8,6 +8,8 @@ import app.database.DatabaseConnector;
 import app.tables.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
@@ -49,6 +51,11 @@ public class GUI implements Runnable {
     private JLabel scheduleStatusLabel;
     private JButton goLeftButton;
     private JButton goRightButton;
+    private JLabel detailsCourtName;
+    private JLabel detailsClientName;
+    private JLabel detailsClientPhone;
+    private JLabel detailsResStatus;
+    private JLabel detailsHeader;
 
     private JFrame frame;
 
@@ -253,6 +260,46 @@ public class GUI implements Runnable {
         resizeColumnWidth(courtTable);
         resizeColumnWidth(companyTable);
         resizeColumnWidth(scheduleTable);
+
+        scheduleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ListSelectionModel selectionModel = scheduleTable.getSelectionModel();
+        selectionModel.addListSelectionListener(e -> {
+            if(selectionModel.getValueIsAdjusting())
+                return;
+            int row = scheduleTable.getSelectedRow();
+            int col = scheduleTable.getSelectedColumn();
+            String res_name = (String) scheduleTable.getValueAt(row,col);
+            if (col > 0)
+                viewReservationDetails(res_name);
+        });
+
+    }
+
+    private void viewReservationDetails(String res_name){
+        if(res_name.equals("-")){
+            detailsHeader.setText("SZCZEGÓŁY REZERWACJI: PROSZĘ WYBRAĆ REZERWACJĘ ABY WYŚWIETLIĆ SZCZEGÓŁY");
+            detailsCourtName.setText("KORT");
+            detailsClientName.setText("KLIENT");
+            detailsClientPhone.setText("TELEFON");
+            detailsResStatus.setText("STATUS");
+        }
+        else {
+            String [] data = res_name.split(":");
+            String res_id = data[1];
+            Reservation res = Reservation.getReservationById(Integer.parseInt(res_id));
+            if(res == null)
+                return;
+            Client client = Client.getClientById(res.klientId);
+            if(client == null)
+                return;
+
+            detailsHeader.setText("SZCZEGÓŁY REZERWACJI NR. " + res.id);
+            detailsCourtName.setText("KORT NUMER " + res.kortId);
+            detailsClientName.setText("KLIENT: " + client.imie + " " + client.nazwisko);
+            detailsClientPhone.setText("TELEFON: " + client.getNumer());
+            detailsResStatus.setText("STATUS: " + res.status);
+
+        }
     }
 
     private void getData() {

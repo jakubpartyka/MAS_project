@@ -43,4 +43,12 @@ public class Reservation {
         Time time = Time.valueOf(timeString+":00");
         return time.getTime() >= czas_od.getTime() && time.getTime() < czas_do.getTime();
     }
+
+    public static Reservation getReservationById(int id){
+        for (Reservation res : allReservations) {
+            if (res.id == id)
+                return res;
+        }
+        return null;
+    }
 }
