@@ -2,10 +2,8 @@ package app.tables;
 
 import app.data.events.Reservation;
 import gui.GUI;
-
 import javax.swing.table.AbstractTableModel;
 import java.sql.Date;
-import java.time.LocalDate;
 
 public class ScheduleTableModel extends AbstractTableModel {
     @Override
@@ -41,10 +39,9 @@ public class ScheduleTableModel extends AbstractTableModel {
         else {
             Date date = Date.valueOf(GUI.currentDate.toString());
 
-            for (Reservation reservation : Reservation.allReservations) {
+            for (Reservation reservation : Reservation.allReservations)
                 if(reservation.data.equals(date) && reservation.kortId == columnIndex && reservation.timeInBetween(time))
                     return "ZAJĘTY :" + reservation.id;          // text to be show in occupied reservation cell
-            }
         }
         return "-";
     }

@@ -102,6 +102,7 @@ public class DatabaseConnector {
             boolean kryty = resultSet.getBoolean(4);
             new Court(id,cena,nawierzchnia,oswietlenie,kryty);
         }
+        close(connection);
     }
 
     public static void getCompanies() throws SQLException {

@@ -21,6 +21,7 @@ public class TrainerTableModel extends AbstractTableModel {
         switch (columnIndex){
             case 0:
                 return trainer.id;
+
             case 1:
                 return trainer.imie;
 

@@ -27,9 +27,8 @@ public class Trainer extends Person{
 
     public String getPoziom(){
         StringBuilder res = new StringBuilder();
-        for (Level level : this.poziom) {
+        for (Level level : this.poziom)
             res.append(level.toString()).append(", ");
-        }
         return res.toString();
     }
 }

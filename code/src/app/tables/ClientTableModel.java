@@ -24,21 +24,16 @@ public class ClientTableModel extends AbstractTableModel {
                 return client.id;
             case 1:
                 return client.imie;
-                
             case 2: 
                 return client.nazwisko;
-                
             case 3:
                 if(client.getNumer() == 0)
                     return "Nie podano";
                 return client.getNumer();
-                
             case 4:
                 return client.data_ur;
-                
             case 5: 
                 return client.data_rejestracji;
-                
             case 6:
                 if(client.firma_id == 0)
                     return "-";
@@ -47,7 +42,6 @@ public class ClientTableModel extends AbstractTableModel {
                     return company.nazwa;
                 else
                     return "-";
-                
             default:
                 return "N/A";
         }

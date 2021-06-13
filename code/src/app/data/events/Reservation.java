@@ -25,6 +25,19 @@ public class Reservation {
         allReservations.add(this);
     }
 
+    public boolean timeInBetween(String timeString) {
+        Time time = Time.valueOf(timeString+":00");
+        return time.getTime() >= czas_od.getTime() && time.getTime() < czas_do.getTime();
+    }
+
+    public static Reservation getReservationById(int id){
+        for (Reservation res : allReservations) {
+            if (res.id == id)
+                return res;
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -37,18 +50,5 @@ public class Reservation {
                 ", czas_do=" + czas_do +
                 ", status=" + status +
                 '}';
-    }
-
-    public boolean timeInBetween(String timeString) {
-        Time time = Time.valueOf(timeString+":00");
-        return time.getTime() >= czas_od.getTime() && time.getTime() < czas_do.getTime();
-    }
-
-    public static Reservation getReservationById(int id){
-        for (Reservation res : allReservations) {
-            if (res.id == id)
-                return res;
-        }
-        return null;
     }
 }

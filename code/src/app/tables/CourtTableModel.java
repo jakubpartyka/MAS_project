@@ -31,7 +31,6 @@ public class CourtTableModel extends AbstractTableModel {
                     return "TAK";
                 else return "NIE";
             default: return "N/A";
-
         }
     }
 
