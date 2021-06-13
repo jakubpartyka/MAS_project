@@ -195,4 +195,27 @@ public class DatabaseConnector {
         statement.executeUpdate();
         close(connection);
     }
+
+    public static void createReservation(Reservation reservation) throws SQLException{
+        Connection connection = connect();
+        PreparedStatement statement = connection.prepareStatement(Queries.CREATE_RESERVATION.expression);
+        statement.setInt(1,reservation.kortId);
+        statement.setInt(2,reservation.klientId);
+        if(reservation.trenerId !=0)
+            statement.setInt(3,reservation.trenerId);
+        else
+            statement.setNull(3, Types.INTEGER);
+        statement.setDate(4,reservation.data);
+        statement.setTime(5,reservation.czas_od);
+        statement.setTime(6,reservation.czas_do);
+        statement.setString(7,reservation.status.name());
+        System.out.println(statement.toString());
+        statement.executeUpdate();
+
+        PreparedStatement statement1 = connection.prepareStatement(Queries.GET_LAST_RESERVATION_ID.expression);
+        ResultSet resultSet = statement1.executeQuery();
+        resultSet.next();
+        reservation.id = resultSet.getInt(1);
+        close(connection);
+    }
 }

@@ -3,6 +3,7 @@ package gui;
 import app.data.Company;
 import app.data.Court;
 import app.data.events.Reservation;
+import app.data.events.ReservationStatus;
 import app.data.person.Client;
 import app.data.person.Trainer;
 import app.database.DatabaseConnector;
@@ -19,7 +20,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes", "DuplicatedCode"})
 public class GUI implements Runnable {
     public static LocalDate currentDate = LocalDate.now();
     private JTabbedPane tabbedPane1;
@@ -66,7 +67,6 @@ public class GUI implements Runnable {
     private JButton checkAvailabilityButton;
     private JButton calculatePriceButton;
     private JButton cancelButton;
-
     private JFrame frame;
 
     @Override
@@ -126,8 +126,8 @@ public class GUI implements Runnable {
             try {
                 DatabaseConnector.getCompanies();
                 ((CompanyTableModel)companyTable.getModel()).fireTableDataChanged();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException throwable) {
+                throwable.printStackTrace();
             }
 
 
@@ -268,9 +268,9 @@ public class GUI implements Runnable {
             // CHECK AVAILABILITY
             ArrayList<Court> availableCourts = new ArrayList<>(Court.allCourts);
             ArrayList<Trainer> availableTrainers = new ArrayList<>(Trainer.allTrainers);
-
             ArrayList<Reservation> chosenDayReservations = new ArrayList<>();
 
+            // get reservations that could cause collision
             for (Reservation reservation : Reservation.allReservations) {
                 if(reservation.data.equals(date))
                     chosenDayReservations.add(reservation);
@@ -284,11 +284,12 @@ public class GUI implements Runnable {
                 }
             }
 
-            // enable buttons
+            // enable next section fields
             saveReservationButton.setEnabled(true);
             calculatePriceButton.setEnabled(true);
             trainerComboBox.setEnabled(true);
             courtComboBox.setEnabled(true);
+
             // disable previous fields
             reserveDateField.setEnabled(false);
             fromComboBox.setEnabled(false);
@@ -344,6 +345,7 @@ public class GUI implements Runnable {
         });
 
         calculatePriceButton.addActionListener(e -> {
+            // parse selected court value to get it's id
             int selectedCourtId = 0;
             try {
                 String tmp = (String)courtComboBox.getSelectedItem();
@@ -354,18 +356,80 @@ public class GUI implements Runnable {
                 reserveStatusLabel.setText("Nie można obliczyć ceny. Błąd: " + exception.getMessage());
             }
 
+            //get court by id
             Court selectedCourt = Court.getCourtById(selectedCourtId);
             if(selectedCourt == null){
                 reserveStatusLabel.setText("Nie można obliczyć ceny. Błąd: Nie wybrano kortu");
                 return;
             }
+
+            // calculate the price
             //noinspection ConstantConditions
-            int a = Integer.parseInt(((String)fromComboBox.getSelectedItem()).substring(0,2));
+            int a = Integer.parseInt(((String)fromComboBox.getSelectedItem()).substring(0,2));      // start hour, result will be like "10"
             //noinspection ConstantConditions
-            int b = Integer.parseInt(((String)toComboBox.getSelectedItem()).substring(0,2));
+            int b = Integer.parseInt(((String)toComboBox.getSelectedItem()).substring(0,2));        // end hour, result will be like "12"
             int length = b - a;
             int price = length * selectedCourt.cena;
             sumLabel.setText(price + " PLN");
+        });
+
+        saveReservationButton.addActionListener(e -> {
+            //noinspection ConstantConditions
+            Time from = Time.valueOf(fromComboBox.getSelectedItem().toString() + ":00");
+            //noinspection ConstantConditions
+            Time to = Time.valueOf(toComboBox.getSelectedItem().toString() + ":00");
+
+            // parse selected court value to get it's id
+            int selectedCourtId = 0;
+            try {
+                String tmp = (String)courtComboBox.getSelectedItem();
+                if (tmp==null || tmp.isBlank())
+                    throw new Exception("Nie wybrano kortu!");
+                selectedCourtId = Integer.parseInt(tmp.split(" ")[1]);
+            } catch (Exception exception){
+                reserveStatusLabel.setText("Nie można obliczyć ceny. Błąd: " + exception.getMessage());
+            }
+
+            //get client id
+            String clientRaw = (String) clientComboBox.getSelectedItem();
+            if(clientRaw == null){
+                reserveStatusLabel.setText("Należy wybrać klienta");
+                return;
+            }
+            clientRaw = clientRaw.split(" ")[2];
+            clientRaw = clientRaw.substring(1);
+            clientRaw = clientRaw.substring(0,clientRaw.length()-1);
+            int clientId = Integer.parseInt(clientRaw);
+
+            //get trainer id
+            int trainerId = 0;
+            String trainerRaw = (String) trainerComboBox.getSelectedItem();
+            if(trainerRaw!= null && !trainerRaw.contains("bez trenera")){
+                trainerRaw = trainerRaw.split(" ")[2];
+                trainerRaw = trainerRaw.substring(1);
+                trainerRaw = trainerRaw.substring(0,trainerRaw.length()-1);
+                trainerId = Integer.parseInt(trainerRaw);
+            }
+
+            Reservation reservation =
+                    new Reservation(-1,
+                            selectedCourtId,
+                            clientId,
+                            trainerId,
+                            Date.valueOf(reserveDateField.getText()),
+                            from,
+                            to,
+                            ReservationStatus.ZAPLANOWANA);
+            try {
+                DatabaseConnector.createReservation(reservation);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+                JOptionPane.showMessageDialog(null,"Błąd poczas tworzenia rezerwacji: " + throwables.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            cancelButton.doClick();
+
+
         });
     }
 
