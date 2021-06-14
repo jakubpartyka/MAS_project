@@ -31,4 +31,12 @@ public class Trainer extends Person{
             res.append(level.toString()).append(", ");
         return res.toString();
     }
+
+    public static Trainer getTrainerById(int id){
+        for (Trainer trainer : allTrainers) {
+            if(trainer.id == id)
+                return trainer;
+        }
+        return null;
+    }
 }

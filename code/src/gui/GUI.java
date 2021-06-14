@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -67,6 +69,7 @@ public class GUI implements Runnable {
     private JButton checkAvailabilityButton;
     private JButton calculatePriceButton;
     private JButton cancelButton;
+    private JLabel detailsTrainerLabel;
     private JFrame frame;
 
     @Override
@@ -154,6 +157,18 @@ public class GUI implements Runnable {
             nipField.setText("");
             branzaField.setText("");
             przedstawicielBox.setSelectedItem("-- brak --");
+        });
+
+
+        targetDateField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if(e.getKeyCode() == 10)
+                    goButton.doClick();
+                else
+                    e.consume();
+            }
         });
 
         addClientButton.addActionListener(e -> {
@@ -498,6 +513,7 @@ public class GUI implements Runnable {
             detailsClientName.setText("KLIENT");
             detailsClientPhone.setText("TELEFON");
             detailsResStatus.setText("STATUS");
+            detailsTrainerLabel.setText("TRENER");
         }
         else {
             String [] data = res_name.split(":");
@@ -514,6 +530,13 @@ public class GUI implements Runnable {
             detailsClientName.setText("KLIENT: " + client.imie + " " + client.nazwisko);
             detailsClientPhone.setText("TELEFON: " + client.getNumer());
             detailsResStatus.setText("STATUS: " + res.status);
+            if(res.trenerId == 0)
+                detailsTrainerLabel.setText("TRENER: brak");
+            else {
+                Trainer t = Trainer.getTrainerById(res.trenerId);
+                if(t != null)
+                    detailsTrainerLabel.setText("TRENER: " + t.imie + " " + t.nazwisko);
+            }
         }
     }
 
@@ -535,7 +558,7 @@ public class GUI implements Runnable {
         frame = new JFrame("WKS Warszawianka - panel zarządzania");
         frame.add(mainPanel);
         frame.setSize(800,600);
-        frame.setMinimumSize(new Dimension(400,300));
+        frame.setMinimumSize(new Dimension(800,400));
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(true);
